@@ -1,33 +1,33 @@
-# Guide du Développeur - Solution de Réinitialisation des Paramètres de Souris
+# Developer Guide - Mouse Settings Reset Solution
 
-## Vue d'ensemble
+## Overview
 
-Cette solution est conçue pour réinitialiser automatiquement les paramètres de souris Windows aux valeurs par défaut. Elle est déployée via Microsoft Intune en tant qu'application Win32 et utilise des tâches planifiées Windows pour s'exécuter à des moments spécifiques.
+This solution is designed to automatically reset Windows mouse settings to default values. It is deployed via Microsoft Intune as a Win32 application and uses Windows scheduled tasks to run at specific times.
 
-## Architecture de la Solution
+## Solution Architecture
 
-### Composants Principaux
+### Main Components
 
-1. **Script Principal (mouse.ps1)**
-   - Réinitialise les paramètres de souris aux valeurs par défaut de Windows 11
-   - Configure la sensibilité, la vitesse, les seuils et la configuration des boutons
-   - Utilise les API Windows pour appliquer les paramètres
-   - Journalise toutes les actions effectuées
+1. **Main Script (mouse.ps1)**
+   - Resets mouse settings to Windows 11 default values
+   - Configures sensitivity, speed, thresholds, and button configuration
+   - Uses Windows APIs to apply settings
+   - Logs all actions performed
 
-2. **Tâche Planifiée (mouse_reset.xml)**
-   - S'exécute dans deux conditions :
-     * À la connexion de l'utilisateur
-     * Après 5 minutes d'inactivité
-   - Configurée pour s'exécuter avec les privilèges les plus élevés disponibles
-   - Utilise le compte utilisateur actuel
+2. **Scheduled Task (mouse_reset.xml)**
+   - Runs under two conditions:
+     * At user login
+     * After 5 minutes of inactivity
+   - Configured to run with highest available privileges
+   - Uses current user account
 
-3. **Scripts de Déploiement**
-   - **Install.ps1** : Script d'installation principal
-   - **Uninstall.ps1** : Script de désinstallation
-   - **Detection.ps1** : Script de détection pour Intune
-   - **Install.cmd** et **Uninstall.cmd** : Wrappers pour l'exécution PowerShell
+3. **Deployment Scripts**
+   - **Install.ps1**: Main installation script
+   - **Uninstall.ps1**: Uninstallation script
+   - **Detection.ps1**: Detection script for Intune
+   - **Install.cmd** and **Uninstall.cmd**: PowerShell execution wrappers
 
-### Structure des Répertoires
+### Directory Structure
 
 ```
 %ProgramData%\PNG\Scripts\Mouse\
@@ -38,96 +38,96 @@ Cette solution est conçue pour réinitialiser automatiquement les paramètres d
     └── mouse-reset-detection.log
 ```
 
-## Processus d'Installation
+## Installation Process
 
-1. Création des répertoires nécessaires
-2. Copie des fichiers dans les emplacements appropriés
-3. Configuration des permissions :
-   - SYSTEM : Contrôle total
-   - Utilisateurs : Lecture et exécution
-4. Enregistrement de la tâche planifiée
-5. Démarrage initial de la tâche
+1. Creation of necessary directories
+2. Copying files to appropriate locations
+3. Permission configuration:
+   - SYSTEM: Full control
+   - Users: Read and execute
+4. Scheduled task registration
+5. Initial task startup
 
-## Mécanisme de Détection
+## Detection Mechanism
 
-Le script de détection (`Detection.ps1`) vérifie :
-1. La présence de tous les fichiers requis
-2. L'existence et l'état de la tâche planifiée
-3. Les permissions correctes sur les répertoires
-4. Effectue jusqu'à 3 tentatives de détection avec un délai de 10 secondes
+The detection script (`Detection.ps1`) checks:
+1. Presence of all required files
+2. Existence and status of scheduled task
+3. Correct directory permissions
+4. Performs up to 3 detection attempts with a 10-second delay
 
-## Journalisation
+## Logging
 
-- Les logs d'installation : `C:\Program Files\PNG\Scripts\Journaux\mouse-reset-install.log`
-- Les logs de détection : `C:\Program Files\PNG\Scripts\Journaux\mouse-reset-detection.log`
-- Format des logs : `[Date-Heure] [Niveau] Message`
+- Installation logs: `C:\Program Files\PNG\Scripts\Journaux\mouse-reset-install.log`
+- Detection logs: `C:\Program Files\PNG\Scripts\Journaux\mouse-reset-detection.log`
+- Log format: `[Date-Time] [Level] Message`
 
-## Paramètres de Souris Configurés
+## Configured Mouse Settings
 
-Les paramètres suivants sont réinitialisés aux valeurs par défaut :
-- Sensibilité de la souris (MouseSensitivity)
-- Vitesse du pointeur (MouseSpeed)
-- Seuils d'accélération (MouseThreshold1, MouseThreshold2)
-- Courbes de mouvement (SmoothMouseXCurve, SmoothMouseYCurve)
-- Vitesse du double-clic (DoubleClickSpeed)
-- Traînée du pointeur (MouseTrails)
-- Configuration des boutons (SwapMouseButtons)
+The following settings are reset to default values:
+- Mouse sensitivity (MouseSensitivity)
+- Pointer speed (MouseSpeed)
+- Acceleration thresholds (MouseThreshold1, MouseThreshold2)
+- Movement curves (SmoothMouseXCurve, SmoothMouseYCurve)
+- Double-click speed (DoubleClickSpeed)
+- Pointer trails (MouseTrails)
+- Button configuration (SwapMouseButtons)
 
-## Déploiement via Intune
+## Intune Deployment
 
-### Prérequis
-- Accès administratif à Microsoft Intune
-- Package `.intunewin` généré avec `IntuneWinAppUtil.exe`
+### Prerequisites
+- Administrative access to Microsoft Intune
+- `.intunewin` package generated with `IntuneWinAppUtil.exe`
 
-### Commandes de Déploiement
-- Installation : `Install.cmd`
-- Désinstallation : `Uninstall.cmd`
-- Détection : `powershell.exe -ExecutionPolicy Bypass -File Detection.ps1`
+### Deployment Commands
+- Installation: `Install.cmd`
+- Uninstallation: `Uninstall.cmd`
+- Detection: `powershell.exe -ExecutionPolicy Bypass -File Detection.ps1`
 
-## Dépannage
+## Troubleshooting
 
-### Problèmes Courants
-1. **La tâche ne s'exécute pas**
-   - Vérifier les permissions
-   - Consulter les journaux d'événements Windows
-   - Vérifier l'état de la tâche planifiée
+### Common Issues
+1. **Task doesn't execute**
+   - Check permissions
+   - Check Windows event logs
+   - Verify scheduled task status
 
-2. **Échec de la détection**
-   - Vérifier les logs dans `C:\Program Files\PNG\Scripts\Journaux`
-   - S'assurer que tous les fichiers sont présents
-   - Vérifier les permissions des répertoires
+2. **Detection failure**
+   - Check logs in `C:\Program Files\PNG\Scripts\Journaux`
+   - Ensure all files are present
+   - Check directory permissions
 
-### Commandes Utiles
+### Useful Commands
 ```powershell
-# Vérifier l'état de la tâche
+# Check task status
 Get-ScheduledTask -TaskName "mouse_reset"
 
-# Vérifier les permissions
+# Check permissions
 Get-Acl "%ProgramData%\PNG\Scripts\Mouse"
 
-# Exécuter la tâche manuellement
+# Run task manually
 Start-ScheduledTask -TaskName "mouse_reset"
 ```
 
-## Maintenance et Mise à Jour
+## Maintenance and Updates
 
-Pour mettre à jour la solution :
-1. Modifier les scripts nécessaires
-2. Mettre à jour la version dans le package Intune
-3. Regénérer le fichier `.intunewin`
-4. Déployer la nouvelle version via Intune
+To update the solution:
+1. Modify necessary scripts
+2. Update version in Intune package
+3. Regenerate `.intunewin` file
+4. Deploy new version via Intune
 
-## Sécurité
+## Security
 
-- Les scripts s'exécutent avec les privilèges élevés nécessaires
-- Les permissions sont strictement contrôlées
-- Les chemins d'accès sont codés en dur pour éviter les attaques par injection
-- La politique d'exécution PowerShell est configurée de manière sécurisée
+- Scripts run with necessary elevated privileges
+- Permissions are strictly controlled
+- Paths are hardcoded to prevent injection attacks
+- PowerShell execution policy is securely configured
 
-## Bonnes Pratiques de Développement
+## Development Best Practices
 
-1. Toujours tester les modifications localement avant le déploiement
-2. Maintenir une documentation à jour des changements
-3. Utiliser le contrôle de version pour suivre les modifications
-4. Tester sur différentes versions de Windows
-5. Valider les logs après chaque modification
+1. Always test changes locally before deployment
+2. Maintain up-to-date documentation of changes
+3. Use version control to track modifications
+4. Test on different Windows versions
+5. Validate logs after each modification

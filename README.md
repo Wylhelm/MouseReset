@@ -1,54 +1,54 @@
-# Solution de Réinitialisation des Paramètres de Souris
+# Mouse Settings Reset Solution
 
 ## Description
-Solution automatisée pour réinitialiser les paramètres de souris Windows aux valeurs par défaut. Cette solution est déployée via Microsoft Intune et s'exécute automatiquement à la connexion de l'utilisateur ainsi qu'après une période d'inactivité.
+Automated solution to reset Windows mouse settings to default values. This solution is deployed via Microsoft Intune and runs automatically at user login and after a period of inactivity.
 
-## Fonctionnalités
-- Réinitialisation automatique des paramètres de souris
-- Exécution à la connexion utilisateur
-- Exécution après 5 minutes d'inactivité
-- Journalisation complète des actions
-- Déploiement via Microsoft Intune
+## Features
+- Automatic reset of mouse settings
+- Execution at user login
+- Execution after 5 minutes of inactivity
+- Complete action logging
+- Deployment via Microsoft Intune
 
-## Structure du Projet
+## Project Structure
 ```
 .
-├── Detection.ps1          # Script de détection pour Intune
-├── Install.cmd           # Script wrapper pour l'installation
-├── Install.intunewin     # Package Intune
-├── Install.ps1           # Script d'installation principal
-├── IntuneWinAppUtil.exe  # Utilitaire de création de package Intune
-├── mouse_reset.xml       # Configuration de la tâche planifiée
-├── mouse.ps1            # Script principal de réinitialisation
-├── Uninstall.cmd        # Script wrapper pour la désinstallation
-└── Uninstall.ps1        # Script de désinstallation principal
+├── Detection.ps1          # Detection script for Intune
+├── Install.cmd           # Installation wrapper script
+├── Install.intunewin     # Intune package
+├── Install.ps1           # Main installation script
+├── IntuneWinAppUtil.exe  # Intune package creation utility
+├── mouse_reset.xml       # Scheduled task configuration
+├── mouse.ps1            # Main reset script
+├── Uninstall.cmd        # Uninstallation wrapper script
+└── Uninstall.ps1        # Main uninstallation script
 ```
 
-## Prérequis
+## Prerequisites
 - Windows 11
-- Droits administratifs pour l'installation
-- Microsoft Intune pour le déploiement
+- Administrative rights for installation
+- Microsoft Intune for deployment
 
 ## Installation
-L'installation est gérée automatiquement via Microsoft Intune. Le package `.intunewin` contient tous les composants nécessaires et configure :
-1. Les scripts de réinitialisation
-2. La tâche planifiée
-3. Les permissions requises
-4. La journalisation
+Installation is handled automatically through Microsoft Intune. The `.intunewin` package contains all necessary components and configures:
+1. Reset scripts
+2. Scheduled task
+3. Required permissions
+4. Logging
 
-## Journalisation
-Les logs sont stockés dans :
+## Logging
+Logs are stored in:
 - `C:\Program Files\PNG\Scripts\Journaux\mouse-reset-install.log`
 - `C:\Program Files\PNG\Scripts\Journaux\mouse-reset-detection.log`
 
 ## Documentation
-Pour plus de détails techniques, consultez le [Guide du Développeur](developer_guide.md).
+For more technical details, see the [Developer Guide](developer_guide.md).
 
 ## Support
-En cas de problème :
-1. Vérifier les fichiers de logs
-2. Consulter la section dépannage du guide développeur
-3. Vérifier l'état de la tâche planifiée via le Planificateur de tâches Windows
+In case of issues:
+1. Check log files
+2. Consult the troubleshooting section in the developer guide
+3. Check scheduled task status via Windows Task Scheduler
 
-## Licence
-Propriétaire - Tous droits réservés
+## License
+Proprietary - All rights reserved
